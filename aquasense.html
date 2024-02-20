@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AQUASENSE</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #BCE8E3; /* Blue-green background color */
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      width: 80%;
+      margin: 50px auto;
+      background-color: #D2F0F5; /* Light blue container color */
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .header {
+      font-size: 20px;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 20px;
+      color: #555;
+    }
+
+    .sensor-container {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .sensor {
+      flex: 1;
+      padding: 10px;
+      margin: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .sensor:hover {
+      background-color: #f0f0f0;
+    }
+
+    .sensor p {
+      margin: 5px 0;
+      color: #333;
+    }
+
+    .turbidity {
+      background-color: #7FB3D5;
+    }
+
+    .temperature {
+      background-color: #F6A5A5;
+    }
+
+    .ph {
+      background-color: #FAD689;
+    }
+
+    .tds {
+      background-color: #A5DEE4;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>AQUASENSE</h1>
+    <div class="header">ENHANCING WATER QUALITY AND ENVIRONMENTAL CONTROL THROUGH IOT MONITORING</div>
+    <div class="sensor-container">
+      <div class="sensor turbidity" id="turbidity">
+        <p><strong>Turbidity:</strong> <span id="turbidityValue">Loading...</span></p>
+      </div>
+      <div class="sensor tds" id="tds">
+        <p><strong>TDS:</strong> <span id="tdsValue">Loading...</span></p>
+      </div>
+      <div class="sensor ph" id="ph">
+        <p><strong>pH:</strong> <span id="phValue">Loading...</span></p>
+      </div>
+      <div class="sensor temperature" id="temperature">
+        <p><strong>Temperature:</strong> <span id="temperatureValue">Loading...</span></p>
+      </div>
+    </div>
+    <div class="info-section"></div>
+    <div class="tip-section"></div>
+  </div>
+
+  <script>
+    function fetchData() {
+      fetch('https://api.thingspeak.com/channels/2402995/feeds/last.json')
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('turbidityValue').textContent = data.field1;
+          document.getElementById('tdsValue').textContent = data.field2;
+          document.getElementById('phValue').textContent = data.field3;
+          document.getElementById('temperatureValue').textContent = data.field4 + '°C';
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    fetchData(); // Fetch data initially
+    setInterval(fetchData, 10000); // Update data every 10 seconds
+  </script>
+</body>
+</html>
